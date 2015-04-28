@@ -1,0 +1,28 @@
+{
+  "name": "tcg-data-table",
+  "version": "0.0.0",
+  "authors": [
+    "Tony Lea <tony.lea@thecontrolgroup.com>"
+  ],
+  "description": "Datatable element that can handle data client side and server side",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "datatable",
+    "data-table"
+  ],
+  "main": "tcg-data-table.html",
+  "license": "MIT",
+  "homepage": "https://github.com/the-control-group/tcg-data-table",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.2"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^2.0.5"
+  }
+}
