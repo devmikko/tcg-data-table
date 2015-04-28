@@ -13,27 +13,52 @@ Datatable element that can handle data client side and server side
 @homepage https://github.com/the-control-group/tcg-data-table
 -->
 
-<polymer-element name="tcg-data-table" attributes="notitle author">
-
+<polymer-element name="tcg-data-table">
   <template>
-
-    <link rel="stylesheet" href="tcg-data-table.css">
-
-    <h1>Hello from tcg-data-table</h1>
-    <content></content>
-
+    <link rel="stylesheet" href="../datatables/media/css/jquery.dataTables.css"> 
+    <link rel="stylesheet" href="./tcg-data-table.css"> 
+    <table id="example" class="display stripe" cellspacing="0" width="100%"></table>
   </template>
-
+  <script src="../datatables/media/js/jquery.js"></script>
+  <script src="../datatables/media/js/jquery.dataTables.min.js"></script>
   <script>
-
     Polymer({
+      publish: {
+        data: [],
+        columns: []
+      },
 
-      ready: function() {
+      observe: {
+        'data columns': 'setup'
+      },
+
+      domReady: function(){
+        this.setup();
+      },
+
+      ready: function(){
 
       },
 
-    });
+      setup: function(){
+        //console.log(this.data);
+        if(!this.oTable){
+          this.oTable = $(this.$.example).DataTable({
+              "dom": '<"toolbar">frtip',
+              "data": this.data,
+              "columns": this.columns,
+              "bLengthChange": false,
+              "initComplete": function(settings, json) {
+                  $(this.$.example).find('.toolbar').html('title');
+                }
+          } );
 
+        }
+          console.log('hit');
+          // this.oTable.data = this.data;
+          // this.oTable.columns = this.columns;
+        }
+    })
   </script>
-
 </polymer-element>
+
