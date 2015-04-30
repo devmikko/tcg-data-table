@@ -25,7 +25,8 @@ Datatable element that can handle data client side and server side
     Polymer({
       publish: {
         data: [],
-        columns: []
+        columns: [],
+        perPage: 10,
       },
 
       observe: {
@@ -41,23 +42,25 @@ Datatable element that can handle data client side and server side
       },
 
       setup: function(){
-        //console.log(this.data);
-        if(!this.oTable){
+        if(this.oTable){
+          this.oTable.destroy();
+        }
+
+        if(this.data){
+          //console.log(this.data);
           this.oTable = $(this.$.example).DataTable({
               "dom": '<"toolbar">frtip',
               "data": this.data,
               "columns": this.columns,
               "bLengthChange": false,
+              "iDisplayLength": this.perPage,
               "initComplete": function(settings, json) {
                   $(this.$.example).find('.toolbar').html('title');
                 }
           } );
 
-        }
-          console.log('hit');
-          // this.oTable.data = this.data;
-          // this.oTable.columns = this.columns;
-        }
+        }  
+      }
     })
   </script>
 </polymer-element>
