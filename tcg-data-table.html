@@ -15,12 +15,13 @@ Datatable element that can handle data client side and server side
 
 <polymer-element name="tcg-data-table">
   <template>
-    <link rel="stylesheet" href="../datatables/media/css/jquery.dataTables.css"> 
+    <!--<link rel="stylesheet" href="datatables/media/css/jquery.dataTables.css"> -->
     <link rel="stylesheet" href="./tcg-data-table.css"> 
     <table id="example" class="display stripe" cellspacing="0" width="100%"></table>
   </template>
   <script src="../datatables/media/js/jquery.js"></script>
   <script src="../datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="../datatables/media/js/dataTables.tableTools.js"></script>
   <script>
     Polymer({
       publish: {
@@ -33,28 +34,45 @@ Datatable element that can handle data client side and server side
       },
 
       domReady: function(){
+        
         this.setup();
+        
       },
 
       ready: function(){
 
+
       },
 
       setup: function(){
-        //console.log(this.data);
         if(!this.oTable){
           this.oTable = $(this.$.example).DataTable({
-              "dom": '<"toolbar">frtip',
+              //"dom": '<"toolbar">frtip',
+              //"dom": 'T<"toolbar">lfrtip',
+              "dom": 'T<"toolbar">lfrtip',
               "data": this.data,
               "columns": this.columns,
               "bLengthChange": false,
               "initComplete": function(settings, json) {
-                  $(this.$.example).find('.toolbar').html('title');
-                }
-          } );
+                },
+              "tableTools": {
+                sSwfPath: "media/copy_csv_xls_pdf.swf"
+            }
+          });
+
+          this.async(function(){
+                $('body /deep/ .toolbar').html('New Customer');
+                //$('body /deep/ :input').html('asdfasdf');
+                //$('body /deep/ :input').attr('placeholder','Search');
+                $('body /deep/ input').html('');
+                $('body /deep/ input[type="search"]').attr('placeholder','Search');
+
+               // $('body /deep/ input').attr('placeholder','Search');
+
+              });
+//          $(this.$.example).html('<b>Custom tool bar! Text/images etc.</b>');
 
         }
-          console.log('hit');
           // this.oTable.data = this.data;
           // this.oTable.columns = this.columns;
         }
