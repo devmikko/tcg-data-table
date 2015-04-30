@@ -15,15 +15,17 @@ Datatable element that can handle data client side and server side
 
 <polymer-element name="tcg-data-table">
   <template>
-    <link rel="stylesheet" href="../datatables/media/css/jquery.dataTables.css"> 
+    <!--<link rel="stylesheet" href="datatables/media/css/jquery.dataTables.css"> -->
     <link rel="stylesheet" href="./tcg-data-table.css"> 
-    <table id="example" class="display stripe" cellspacing="0" width="100%"></table>
+    <table id="table" class="display stripe" cellspacing="0" width="100%"></table>
   </template>
   <script src="../datatables/media/js/jquery.js"></script>
   <script src="../datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/dataTables.tableTools.js"></script>
   <script>
     Polymer({
       publish: {
+        name: 'Name of Table',
         data: [],
         columns: [],
         perPage: 10,
@@ -34,7 +36,9 @@ Datatable element that can handle data client side and server side
       },
 
       domReady: function(){
+        
         this.setup();
+        
       },
 
       ready: function(){
@@ -42,26 +46,34 @@ Datatable element that can handle data client side and server side
       },
 
       setup: function(){
+
         if(this.oTable){
           this.oTable.destroy();
         }
 
         if(this.data){
-          //console.log(this.data);
-          this.oTable = $(this.$.example).DataTable({
-              "dom": '<"toolbar">frtip',
+          
+          this.oTable = $(this.$.table).DataTable({
+              "dom": 'T<"toolbar">lfrtip',
               "data": this.data,
               "columns": this.columns,
               "bLengthChange": false,
               "iDisplayLength": this.perPage,
-              "initComplete": function(settings, json) {
-                  $(this.$.example).find('.toolbar').html('title');
-                }
-          } );
+              "oLanguage": { "sSearch": "" },
+              "tableTools": {
+                  "sSwfPath": "/media/copy_csv_xls_pdf.swf"
+              }
+          });
 
-        }  
+          this.async(function(){
+            $('body /deep/ .toolbar').html(this.name);
+            $('body /deep/ input').html('');
+            $('body /deep/ input[type="search"]').attr('placeholder','Search');
+          });
       }
-    })
+    },
+
+  })
   </script>
 </polymer-element>
 
