@@ -1,31 +1,38 @@
 tcg-data-table
 ============
+A DataTable Element for client side and server side data. Built on top of DataTables jQuery plugin for Polymer 0.5.
 
-See the [component page](https://github.com/the-control-group/tcg-data-table) for more information.
+![Screenshot of DataTables](screenshot.jpg)
 
-## Getting Started
-
-## Testing Your Element
-
-Add the logic specific to your new element and verify its functionality. Good unit tests are essential to your verification plan but a good way to quickly sanity test your component is to access your demo.html file via a local web server. There are several ways to do this but one easy method is to run a simple web server that ships with Python, using the commands:
-
-```sh
-python -m SimpleHTTPServer
+## How to use
+###Include the element in your page
+```
+<link rel="import" href="/bower_components/tcg-data-table/tcg-data-table.html">
 ```
 
-Or other method using NodeJS:
+###Then use the element in your page
 
-```sh
-http-server ./
+```
+<tcg-data-table 
+	name="Title of Table Data" 
+	data="{{ data }}" 
+	columns="{{ columns }}"></tcg-data-table>
 ```
 
-This starts a web server on port 8000, so you can test your new element by navigating a browser to `localhost:8000/test/index.html`.
+###Other attributes you may include in the table
 
-### web-component-tester
-
-The tests are also compatible with [web-component-tester](https://github.com/Polymer/web-component-tester). You can run them on multiple local browsers via:
-
-```sh
-npm install -g web-component-tester
-wct
 ```
+<tcg-data-table 
+	name="Title of Table Data" 
+	data="{{ data }}" 
+	columns="{{ columns }}" 
+	perPage="{{ per_page }}" 
+	page="{{ page }}" 
+	total="{{ total }}" 
+	paginationResults="{{ paginationResults }}"></tcg-data-table>
+
+```
+
+####Note: by adding 'page' attribute you are saying that the element is going to retrieve data via server side
+
+Learn more about how to organize the data at http://www.datatables.net
