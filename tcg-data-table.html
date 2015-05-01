@@ -45,6 +45,32 @@ Datatable element that can handle data client side and server side
 
       },
 
+      exportCsv: function(){
+        var value = $('body /deep/ table').children().map(function(i, group){
+          return $(group).children().toArray().map(function(tr){
+            return '"' + $(tr).children().toArray().map(function(td){
+              return $(td).text().trim().replace(/"/g, '""');
+            }).join('","') + '"';
+          })
+        }).toArray().join('\n');        
+
+        //Download the file
+        this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
+
+      },
+
+      download: function(uri, filename){
+        var link = document.createElement('a');
+        if (typeof link.download !== 'string')
+          return location.replace();
+
+        document.body.appendChild(link); //Firefox requires the link to be in the body
+        link.download = filename;
+        link.href = uri;
+        link.click();
+        document.body.removeChild(link); //remove the link when done
+      },
+
       setup: function(){
 
         if(this.oTable){
@@ -59,19 +85,27 @@ Datatable element that can handle data client side and server side
               "columns": this.columns,
               "bLengthChange": false,
               "iDisplayLength": this.perPage,
-              "oLanguage": { "sSearch": "" },
-              "tableTools": {
-                  "sSwfPath": "/media/copy_csv_xls_pdf.swf"
-              }
-          });
+              "oLanguage": { "sSearch": "" }
+              });
 
           this.async(function(){
             $('body /deep/ .toolbar').html(this.name);
-            $('body /deep/ input').html('');
-            $('body /deep/ input[type="search"]').attr('placeholder','Search');
+            console.log($("body /deep/ .DTTT_button_csv" ).has('button').length);
+            if($("body /deep/ .DTTT_button_csv" ).has('button').length < 1){
+              $("body /deep/ .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
+              $("body /deep/ .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
+              $("body /deep/ .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
+              };
+
+            self = this;
+            $("body /deep/ #export_excel").click(function(){
+              self.exportCsv();
+            });
+            $('body /deep/ input[type="search"]').attr('placeholder','Search');  
+
           });
       }
-    },
+    }
 
   })
   </script>
