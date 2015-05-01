@@ -50,8 +50,6 @@ visibility: hidden;
 
 #table_filter input{
   visibility: visible;
-  background:#F1F7F7;
-  visibility: visible;
   background: #F1F7F7;
   font-size: 20px;
   margin-left: 15px;
@@ -59,8 +57,49 @@ visibility: hidden;
   border: 0px solid;
 }
 
+input:focus { 
+    border: 0px solid;
+}
+
+#export_excel{
+  background-image: url('media/images/excel.png');
+  width: 32px;
+  height: 25px;
+  float: right;
+  background-color: transparent;
+  /* position: absolute; */
+  background-size: 32px 25px;
+  visibility: visible;
+  margin-right: 10px;
+  margin-top: 3px;
+  border: 0px;
+}
+
+#export_label{
+	visibility: visible;
+	margin-bottom: -25px;
+  	display: block;
+  	color: #A9A9A9;
+  	margin-top: -3px;
+}
+
+#export_pdf{
+  background-image: url('media/images/pdf.png');
+  width: 32px;
+  height: 25px;
+  float: right;
+  background-color: transparent;
+  /* position: absolute; */
+  background-size: 32px 25px;
+  visibility: visible;
+  margin-right: 10px;
+  margin-top: 3px;
+  border: 0px;
+}
+
 .DTTT_container{
 	float: right;
+	visibility: hidden;
 }
 
 input{
