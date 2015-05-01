@@ -4,6 +4,12 @@ A DataTable Element for client side and server side data. Built on top of DataTa
 
 ![Screenshot of DataTables](screenshot.jpg)
 
+## How to install
+
+```
+bower install --save tcg-data-table
+```
+
 ## How to use
 ###Include the element in your page
 ```
