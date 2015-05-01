@@ -1,6 +1,6 @@
 {
   "name": "tcg-data-table",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "authors": [
     "Tony Lea <tony.lea@thecontrolgroup.com>"
   ],
@@ -21,7 +21,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^0.5.2",
-    "DataTables": "~1.10.6"
+    "DataTables": "~1.10.6",
+    "core-ajax": "Polymer/core-ajax#^0.5"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.5",

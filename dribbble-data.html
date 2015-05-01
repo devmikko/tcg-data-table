@@ -26,23 +26,41 @@ more info, see [the docs](https://ele.io/docs).
 
       <!--polymer-jsonp id="ajax" auto url="https://api.dribbble.com/v1/user?access_token={{ accessToken }}" response="{{shots}}"></polymer-jsonp-->
 
-      <tcg-data-table name="Dribbble Demo" data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" paginationResults="{{ paginationResults }}"></tcg-data-table>
+      <tcg-data-table name="Dribbble Demo" data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" search="{{ search }}" sort="{{ sort }}"
+      url="https://api.dribbble.com/v1/shots" 
+      headers='"Authorization": "Bearer c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"'
+      paginationResults="{{ paginationResults }}"></tcg-data-table>
 
   </template>
   <script>
     Polymer('dribbble-data', {
 
+/*
+      serverSide: true,
+       ajax: {
+        url: 'https://api.dribbble.com/v1/shots',
+        headers: '{"Authorization": "Bearer c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"}',
+        type: 'POST'
+       },
+*/
       /*** DRIBBBLE Access Token get from: http://developer.dribbble.com/ ***/
       //accessToken: '',
 
+      accessToken: 'c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62',
+      
       name: 'Polymer Dev',
       per_page: 4,
       page: 1,
+
       total: 2000,
       paginationResults:9,
       observe: {
         'shots': 'shotsChanged',
+        'search': 'searchChanged',
+        'sort': 'sortChanged',
       },
+      search: [],
+      sort: [],
       shots: [],
       columns : [
             { "title" : "Image", "data": "images", "orderable": false,
@@ -53,7 +71,7 @@ more info, see [the docs](https://ele.io/docs).
                     if(typeof source.html_url != "undefined"){ url = source.html_url; }
                     return '<a href="' + url + '" target="_blank"><img src="'+ image + '" ></a>';
             }},
-            { "title" : "Title", "data": "title", "orderable": false, },
+            { "title" : "Title", "data": "title", "orderable": true, },
             { "title" : "Description", "data": "description", "orderable": false, },
             { "title" : "URL", "data": "html_url", "orderable": false,  }
         ],
@@ -64,6 +82,18 @@ more info, see [the docs](https://ele.io/docs).
           this.data = this.shots;
         }
       },  
+
+      searchChanged: function(){
+        if(this.search){
+          console.log(this.search);
+        }
+      },
+
+      sortChanged: function(){
+        if(this.sort){
+          console.log(this.sort);
+        }
+      },
 
     });
   </script>

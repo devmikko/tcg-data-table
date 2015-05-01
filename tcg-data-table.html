@@ -32,6 +32,7 @@ Datatable element that can handle data client side and server side
         paginationResults: 9,
         page:'',
         search:'',
+        sort: '',
         total: 0,
         server: false
       },
@@ -85,14 +86,23 @@ Datatable element that can handle data client side and server side
         }
 
         if(this.data){
-          
+          console.log('run again');
+          console.log(this.data);
+          console.log('run again 2');
           this.oTable = $(this.$.table).DataTable({
+             //serverSide: true,
+             //ajax: {
+              //url: this.url
+              // url: "https://api.dribbble.com/v1/user?access_token=c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"
+              // }
               "dom": 'T<"toolbar">lfrtip',
               "data": this.data,
               "columns": this.columns,
+
               "bLengthChange": false,
               "iDisplayLength": this.perPage,
               "oLanguage": { "sSearch": "" }
+              
               });
 
           if(this.server){
@@ -115,6 +125,34 @@ Datatable element that can handle data client side and server side
             });
             $('body /deep/ input[type="search"]').attr('placeholder','Search');  
 
+            console.log(this.data);
+            if(self.server){
+              $("body /deep/ .sorting_desc, body /deep/ .sorting_asc").unbind()
+                  .bind("th", function(e) { // Bind our desired behavior
+                      // reload table data
+                      self.search = this.value;
+                      //reload
+
+                  });
+
+                  $("body /deep/ .sorting_desc, body /deep/ .sorting_desc").unbind()
+                  .bind("th", function(e) { // Bind our desired behavior
+                      // reload table data
+                      self.search = this.value;
+                      //reload
+
+                  });
+
+
+              $("body /deep/ .dataTables_filter input").unbind() // Unbind previous default bindings
+                  .bind("input", function(e) { // Bind our desired behavior
+                      // reload table data
+                      self.search = this.value;
+                      //reload
+
+                  });
+
+                };
           });
       }
     },
