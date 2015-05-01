@@ -14,48 +14,58 @@ more info, see [the docs](https://ele.io/docs).
 -->
 <polymer-element name="dribbble-data" attributes="name">
   <template>
-      <polymer-jsonp id="ajax" auto url="http://api.dribbble.com/shots/everyone?per_page={{ per_page }}&pages=30&callback=" response="{{shots}}"></polymer-jsonp>
 
-      <tcg-data-table data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}"></tcg-data-table>
+      <core-ajax
+        auto
+        url="https://api.dribbble.com/v1/shots?per_page={{per_page}}&page={{page}}"
+        headers='{"Authorization": "Bearer {{ accessToken }}"}'
+        handleAs="json"
+        response="{{shots}}"></core-ajax>
+      
+      <!--polymer-jsonp id="ajax" auto url="http://api.dribbble.com/shots/everyone?per_page={{ per_page }}&page={{page}}&callback=" response="{{shots}}"></polymer-jsonp-->
+
+      <!--polymer-jsonp id="ajax" auto url="https://api.dribbble.com/v1/user?access_token={{ accessToken }}" response="{{shots}}"></polymer-jsonp-->
+
+      <tcg-data-table data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" paginationResults="{{ paginationResults }}"></tcg-data-table>
 
   </template>
   <script>
     Polymer('dribbble-data', {
-      /**
-       * The name of the person you want to say hello to.
-       * @attribute name
-       * @type string
-       * @default "Polymer Dev"
-       */
+
+      /*** DRIBBBLE Access Token get from: http://developer.dribbble.com/ ***/
+      accessToken: 'c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62',
+      //accessToken: '',
+
       name: 'Polymer Dev',
-      per_page: 15,
+      per_page: 100,
+      page: 1,
+      total: 2000,
+      paginationResults:9,
       observe: {
         'shots': 'shotsChanged',
       },
       shots: [],
       columns : [
-            { "title" : "ID", "data": "id" },
+            { "title" : "Image", "data": "images", 
+              "mData" : function ( source ) {
+                    image = '';
+                    url = '';
+                    if(typeof source.images != "undefined"){ image = source.images.teaser; }
+                    if(typeof source.html_url != "undefined"){ url = source.html_url; }
+                    return '<a href="' + url + '" target="_blank"><img src="'+ image + '" ></a>';
+            }},
             { "title" : "Title", "data": "title" },
-            { "title" : "URL", "data": "url" }
+            { "title" : "Description", "data": "description" },
+            { "title" : "URL", "data": "html_url",  }
         ],
       data:  [],
-      
-
-      ready: function() {
-
-      },
 
       shotsChanged: function(){
-        this.data = this.shots.shots;
+        if(this.shots){
+          this.data = this.shots;
+        }
       },  
 
-      dribbbleResponse: function(evt, res){
-        console.log(res);
-      },
-
-      domReady: function(){
-        
-      },
     });
   </script>
 </polymer-element>

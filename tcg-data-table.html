@@ -29,6 +29,11 @@ Datatable element that can handle data client side and server side
         data: [],
         columns: [],
         perPage: 10,
+        paginationResults: 9,
+        page:'',
+        search:'',
+        total: 0,
+        server: false
       },
 
       observe: {
@@ -42,7 +47,9 @@ Datatable element that can handle data client side and server side
       },
 
       ready: function(){
-
+        if(this.page || this.search){
+          this.server = true;
+        }
       },
 
       setup: function(){
@@ -65,6 +72,11 @@ Datatable element that can handle data client side and server side
               }
           });
 
+          if(this.server){
+            this.addCustomPagination();
+            //this.addCustomSearch();
+          }
+
           this.async(function(){
             $('body /deep/ .toolbar').html(this.name);
             $('body /deep/ input').html('');
@@ -73,7 +85,55 @@ Datatable element that can handle data client side and server side
       }
     },
 
-  })
+    addCustomPagination: function(){
+        
+        this.async(function(){
+          if(this.page){
+
+            var disabled = '';
+
+            if(this.page == 1){
+              disabled = " disabled";
+            }
+            var prevTemplate = '<a class="paginate_button previous' + disabled + '" id="table_previous">Previous</a>';
+
+            if(this.total < this.perPage){ this.perPage = this.total }
+            var pages = '';
+
+            var pagination_mid = parseInt(this.page - Math.floor(this.paginationResults/2));
+            if(pagination_mid < 1){ pagination_mid = 1; }
+            for(var i=pagination_mid; i < pagination_mid+this.paginationResults; i++){
+              var current = '';
+              if(i == this.page){ current = ' current'; }
+              pages = pages + '<span><a class="paginate_button pageinate_page' + current + '" aria-controls="table" data-page="' + i + '" tabindex="0">' + i + '</a></span>';
+            }
+
+            var nextTemplate = '<a class="paginate_button next" id="table_next">Next</a>';
+            var template = prevTemplate + pages + nextTemplate;
+
+            // Add the New Pagination template
+            $('body /deep/ .dataTables_paginate').html(template);
+
+            // Perform the Link functionality to set page accordingly
+            this.async(function(){
+              var self = this;
+              $('body /deep/ #table_next').not('.disabled').click(function(){
+                self.page += 1;
+              });
+              $('body /deep/ #table_previous').not('.disabled').click(function(){
+                self.page -= 1;
+              });
+              $('body /deep/ .pageinate_page').click(function(){
+                self.page = $(this).data('page');
+              });
+            });
+          }
+        });
+    },
+
+  });
+
+
   </script>
 </polymer-element>
 
