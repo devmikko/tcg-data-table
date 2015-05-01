@@ -26,18 +26,17 @@ more info, see [the docs](https://ele.io/docs).
 
       <!--polymer-jsonp id="ajax" auto url="https://api.dribbble.com/v1/user?access_token={{ accessToken }}" response="{{shots}}"></polymer-jsonp-->
 
-      <tcg-data-table data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" paginationResults="{{ paginationResults }}"></tcg-data-table>
+      <tcg-data-table name="Dribbble Demo" data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" paginationResults="{{ paginationResults }}"></tcg-data-table>
 
   </template>
   <script>
     Polymer('dribbble-data', {
 
       /*** DRIBBBLE Access Token get from: http://developer.dribbble.com/ ***/
-      accessToken: 'c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62',
       //accessToken: '',
 
       name: 'Polymer Dev',
-      per_page: 100,
+      per_page: 4,
       page: 1,
       total: 2000,
       paginationResults:9,
@@ -46,7 +45,7 @@ more info, see [the docs](https://ele.io/docs).
       },
       shots: [],
       columns : [
-            { "title" : "Image", "data": "images", 
+            { "title" : "Image", "data": "images", "orderable": false,
               "mData" : function ( source ) {
                     image = '';
                     url = '';
@@ -54,9 +53,9 @@ more info, see [the docs](https://ele.io/docs).
                     if(typeof source.html_url != "undefined"){ url = source.html_url; }
                     return '<a href="' + url + '" target="_blank"><img src="'+ image + '" ></a>';
             }},
-            { "title" : "Title", "data": "title" },
-            { "title" : "Description", "data": "description" },
-            { "title" : "URL", "data": "html_url",  }
+            { "title" : "Title", "data": "title", "orderable": false, },
+            { "title" : "Description", "data": "description", "orderable": false, },
+            { "title" : "URL", "data": "html_url", "orderable": false,  }
         ],
       data:  [],
 

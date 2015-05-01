@@ -117,7 +117,7 @@ Datatable element that can handle data client side and server side
 
           });
       }
-    }
+    },
 
     addCustomPagination: function(){
         
@@ -131,12 +131,16 @@ Datatable element that can handle data client side and server side
             }
             var prevTemplate = '<a class="paginate_button previous' + disabled + '" id="table_previous">Previous</a>';
 
-            if(this.total < this.perPage){ this.perPage = this.total }
+           
             var pages = '';
-
+            if(this.total < this.perPage){ this.perPage = this.total; this.paginationResults = 1; }
             var pagination_mid = parseInt(this.page - Math.floor(this.paginationResults/2));
             if(pagination_mid < 1){ pagination_mid = 1; }
+
+
+
             for(var i=pagination_mid; i < pagination_mid+this.paginationResults; i++){
+              if(i*this.perPage > this.total){ break; }
               var current = '';
               if(i == this.page){ current = ' current'; }
               pages = pages + '<span><a class="paginate_button pageinate_page' + current + '" aria-controls="table" data-page="' + i + '" tabindex="0">' + i + '</a></span>';

@@ -36,7 +36,7 @@ th {color: gray;}
 	padding-left: 25px;
 	padding-right: 30px;
 	padding-bottom: 10px;
-	padding: 12px 20px;
+	padding: 12px 25px;
 	font-size: 20px;
 	text-transform: uppercase;
 	color: #222;
@@ -55,6 +55,15 @@ visibility: hidden;
   margin-left: 15px;
   border-bottom: 1px solid #ccc;
   border: 0px solid;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border:0px;
+  outline:none;
+  width:100%;
 }
 
 input:focus { 
@@ -73,14 +82,24 @@ input:focus {
   margin-right: 10px;
   margin-top: 3px;
   border: 0px;
+  cursor:pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border:0px;
+  outline:none;
 }
 
 #export_label{
 	visibility: visible;
 	margin-bottom: -25px;
-  	display: block;
-  	color: #A9A9A9;
-  	margin-top: -3px;
+  display: block;
+  color: #A9A9A9;
+  margin-top: -3px;
+  margin-left: 35px;
 }
 
 #export_pdf{
@@ -95,6 +114,15 @@ input:focus {
   margin-right: 10px;
   margin-top: 3px;
   border: 0px;
+  cursor:pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border:0px;
+  outline:none;
 }
 
 .DTTT_container{
@@ -430,6 +458,7 @@ table.dataTable td {
   float: left;
   text-align: right;
   font-size: 200%;
+  width:30%;
 }
 .dataTables_wrapper .dataTables_filter input {
   margin-left: 0.5em;
@@ -459,11 +488,11 @@ table.dataTable td {
   text-decoration: none !important;
   cursor: pointer;
   *cursor: hand;
-  color: #dddddd !important;
+  color: #bbb !important;
   border: 1px solid transparent;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-  color: #dddddd !important;
+  color: #fff !important;
   /*border: 1px solid #cacaca;*/
   background-color: #6ED2DE;
   border-radius: 5px;
@@ -483,7 +512,7 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
   cursor: default;
-  color: #666 !important;
+  color: #dfdfdf !important;
   border: 1px solid transparent;
   background: transparent;
   box-shadow: none;
