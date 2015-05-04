@@ -42,120 +42,100 @@ Datatable element that can handle data client side and server side
       },
 
       domReady: function(){
-        
         this.setup();
-        
-      },
-
-      ready: function(){
-        if(this.page || this.search){
-          this.server = true;
-        }
-      },
-
-      exportCsv: function(){
-        var value = $('body /deep/ table').children().map(function(i, group){
-          return $(group).children().toArray().map(function(tr){
-            return '"' + $(tr).children().toArray().map(function(td){
-              return $(td).text().trim().replace(/"/g, '""');
-            }).join('","') + '"';
-          })
-        }).toArray().join('\n');        
-
-        //Download the file
-        this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
-
-      },
-
-      download: function(uri, filename){
-        var link = document.createElement('a');
-        if (typeof link.download !== 'string')
-          return location.replace();
-
-        document.body.appendChild(link); //Firefox requires the link to be in the body
-        link.download = filename;
-        link.href = uri;
-        link.click();
-        document.body.removeChild(link); //remove the link when done
       },
 
       setup: function(){
 
-        if(this.oTable){
-          this.oTable.destroy();
-        }
-
+        // if data is not empty perform datatables functionality
         if(this.data){
-          console.log('run again');
-          console.log(this.data);
-          console.log('run again 2');
+
+          // if table is already created destroy the table so we can re-create table
+          if(this.oTable){
+            this.oTable.destroy();
+          }
+          
+          // create the Datatable
           this.oTable = $(this.$.table).DataTable({
-             //serverSide: true,
-             //ajax: {
-              //url: this.url
-              // url: "https://api.dribbble.com/v1/user?access_token=c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"
-              // }
-              "dom": 'T<"toolbar">lfrtip',
-              "data": this.data,
-              "columns": this.columns,
+            "dom": 'T<"toolbar">lfrtip',
+            "data": this.data,
+            "columns": this.columns,
+            "bLengthChange": false,
+            "iDisplayLength": this.perPage,
+            "oLanguage": { "sSearch": "" }
+          });
 
-              "bLengthChange": false,
-              "iDisplayLength": this.perPage,
-              "oLanguage": { "sSearch": "" }
-              
-              });
-
+          // Add custom pagination if we are getting data via server side
           if(this.server){
             this.addCustomPagination();
-            //this.addCustomSearch();
           }
 
           this.async(function(){
-            $('body /deep/ .toolbar').html(this.name);
-            console.log($("body /deep/ .DTTT_button_csv" ).has('button').length);
-            if($("body /deep/ .DTTT_button_csv" ).has('button').length < 1){
-              $("body /deep/ .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
-              $("body /deep/ .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
-              $("body /deep/ .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
-              };
-
+            
+            // store polymer this element in self
             self = this;
-            $("body /deep/ #export_excel").click(function(){
+
+            // Add the name to the table
+            $('body /deep/ #' + this.id + '::shadow .toolbar').html(this.name);
+            
+            // Add the export buttons on the table
+            if($("body /deep/ #" + this.id + "::shadow .DTTT_button_csv" ).has('button').length < 1){
+              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
+              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
+              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
+            }
+
+            // Perform the exportCSV function
+            $("body /deep/ #" + this.id + "::shadow #export_excel").click(function(){
               self.exportCsv();
             });
-            $('body /deep/ input[type="search"]').attr('placeholder','Search');  
 
-            console.log(this.data);
+            // Add the search text to the textbox
+            $('body /deep/ #' + this.id + '::shadow input[type="search"]').attr('placeholder','Search');  
+
+            // If we are handling data via server side
             if(self.server){
-              $("body /deep/ .sorting_desc, body /deep/ .sorting_asc").unbind()
-                  .bind("th", function(e) { // Bind our desired behavior
-                      // reload table data
-                      self.search = this.value;
-                      //reload
+  
+              // Override the sorting functionality and write our own custom sorting
+              $("body /deep/ #" + this.id + "::shadow th").not('.sorting_disabled').unbind().bind('click', 'th', function(e){
+                
+                var title = $(this).text();
+                var data = '';
+                for(var i = 0; i < self.columns.length; i++){
+                  if(self.columns[i].title == title){
+                    data = self.columns[i].data;
+                    break;
+                  }
+                }
 
-                  });
+                if($(this).hasClass('sorting_desc')){
+                  $(this).removeClass('sorting_desc').addClass('sorting_asc');
+                  self.sort = data + ':asc';
 
-                  $("body /deep/ .sorting_desc, body /deep/ .sorting_desc").unbind()
-                  .bind("th", function(e) { // Bind our desired behavior
-                      // reload table data
-                      self.search = this.value;
-                      //reload
+                } else if($(this).hasClass('sorting_asc')) {
+                  $(this).removeClass('sorting_asc').addClass('sorting_desc');
+                  self.sort = data + ':desc';
+                } else {
+                  $(this).removeClass('sorting_desc').addClass('sorting_asc');
+                  self.sort = data + ':asc';
+                }
 
-                  });
+              }); // End overriding and adding custom search functionality
+                  
+              //  Unbind previous default bindings for search
+              $("body /deep/ #" + this.id + "::shadow .dataTables_filter input").unbind() 
+                .bind("input", function(e) { // And bind our desired behavior
+                  // reload table data
+                  self.search = this.value;
+                  //reload
+              }); // End search overriding
 
+            } // end the if( self.server )
+        });
+      
+      } // End if this.data
 
-              $("body /deep/ .dataTables_filter input").unbind() // Unbind previous default bindings
-                  .bind("input", function(e) { // Bind our desired behavior
-                      // reload table data
-                      self.search = this.value;
-                      //reload
-
-                  });
-
-                };
-          });
-      }
-    },
+    }, // End setupFunction
 
     addCustomPagination: function(){
         
@@ -168,14 +148,11 @@ Datatable element that can handle data client side and server side
               disabled = " disabled";
             }
             var prevTemplate = '<a class="paginate_button previous' + disabled + '" id="table_previous">Previous</a>';
-
            
             var pages = '';
             if(this.total < this.perPage){ this.perPage = this.total; this.paginationResults = 1; }
             var pagination_mid = parseInt(this.page - Math.floor(this.paginationResults/2));
             if(pagination_mid < 1){ pagination_mid = 1; }
-
-
 
             for(var i=pagination_mid; i < pagination_mid+this.paginationResults; i++){
               if(i*this.perPage > this.total){ break; }
@@ -188,24 +165,53 @@ Datatable element that can handle data client side and server side
             var template = prevTemplate + pages + nextTemplate;
 
             // Add the New Pagination template
-            $('body /deep/ .dataTables_paginate').html(template);
+            $('body /deep/ #' + this.id + '::shadow .dataTables_paginate').html(template);
 
             // Perform the Link functionality to set page accordingly
             this.async(function(){
               var self = this;
-              $('body /deep/ #table_next').not('.disabled').click(function(){
+              $('body /deep/ #' + this.id + '::shadow #table_next').not('.disabled').click(function(){
                 self.page += 1;
               });
-              $('body /deep/ #table_previous').not('.disabled').click(function(){
+              $('body /deep/ #' + this.id + '::shadow #table_previous').not('.disabled').click(function(){
                 self.page -= 1;
               });
-              $('body /deep/ .pageinate_page').click(function(){
+              $('body /deep/ #' + this.id + '::shadow .pageinate_page').click(function(){
                 self.page = $(this).data('page');
               });
             });
           }
         });
-    },
+    }, // END Custom pagination function
+
+    // Export CSV functionality
+    exportCsv: function(){
+      var value = $('body /deep/ #' + this.id + '::shadow table').children().map(function(i, group){
+        return $(group).children().toArray().map(function(tr){
+          return '"' + $(tr).children().toArray().map(function(td){
+            return $(td).text().trim().replace(/"/g, '""');
+          }).join('","') + '"';
+        })
+      }).toArray().join('\n');        
+
+      //Download the file
+      this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
+   
+    }, // End export CSV functionality
+
+    // Download functionality for exporting CSV
+    download: function(uri, filename){
+      var link = document.createElement('a');
+      if (typeof link.download !== 'string')
+        return location.replace();
+
+      document.body.appendChild(link); //Firefox requires the link to be in the body
+      link.download = filename;
+      link.href = uri;
+      link.click();
+      document.body.removeChild(link); //remove the link when done
+    
+    }, // End Download functionality
 
   });
 

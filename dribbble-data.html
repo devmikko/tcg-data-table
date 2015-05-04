@@ -21,32 +21,25 @@ more info, see [the docs](https://ele.io/docs).
         headers='{"Authorization": "Bearer {{ accessToken }}"}'
         handleAs="json"
         response="{{shots}}"></core-ajax>
-      
-      <!--polymer-jsonp id="ajax" auto url="http://api.dribbble.com/shots/everyone?per_page={{ per_page }}&page={{page}}&callback=" response="{{shots}}"></polymer-jsonp-->
 
-      <!--polymer-jsonp id="ajax" auto url="https://api.dribbble.com/v1/user?access_token={{ accessToken }}" response="{{shots}}"></polymer-jsonp-->
-
-      <tcg-data-table name="Dribbble Demo" data="{{ data }}" columns="{{ columns }}" perPage="{{ per_page }}" page="{{ page }}" total="{{ total }}" search="{{ search }}" sort="{{ sort }}"
-      url="https://api.dribbble.com/v1/shots" 
-      headers='"Authorization": "Bearer c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"'
-      paginationResults="{{ paginationResults }}"></tcg-data-table>
+      <tcg-data-table id="dribbble" 
+        name="Dribbble Demo" 
+        data="{{ data }}"
+        columns="{{ columns }}" 
+        perPage="{{ per_page }}" 
+        page="{{ page }}" 
+        total="{{ total }}" 
+        search="{{ search }}" 
+        sort="{{ sort }}"
+        server="true"></tcg-data-table>
 
   </template>
   <script>
     Polymer('dribbble-data', {
 
-/*
-      serverSide: true,
-       ajax: {
-        url: 'https://api.dribbble.com/v1/shots',
-        headers: '{"Authorization": "Bearer c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62"}',
-        type: 'POST'
-       },
-*/
       /*** DRIBBBLE Access Token get from: http://developer.dribbble.com/ ***/
       //accessToken: '',
-
-      accessToken: 'c943330af3cc33a69f31084e5898f0ca624015bd5cca526214ff83a859902f62',
+      
       
       name: 'Polymer Dev',
       per_page: 4,
@@ -72,8 +65,8 @@ more info, see [the docs](https://ele.io/docs).
                     return '<a href="' + url + '" target="_blank"><img src="'+ image + '" ></a>';
             }},
             { "title" : "Title", "data": "title", "orderable": true, },
-            { "title" : "Description", "data": "description", "orderable": false, },
-            { "title" : "URL", "data": "html_url", "orderable": false,  }
+            { "title" : "Description", "data": "description", "orderable": true, },
+            { "title" : "URL", "data": "html_url", "orderable": true,  }
         ],
       data:  [],
 
