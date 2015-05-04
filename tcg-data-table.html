@@ -71,33 +71,42 @@ Datatable element that can handle data client side and server side
           }
 
           this.async(function(){
+
+            if(this.id){
+              this.id = '#' + this.id;
+            }
             
             // store polymer this element in self
             self = this;
 
             // Add the name to the table
-            $('body /deep/ #' + this.id + '::shadow .toolbar').html(this.name);
+            $('body /deep/ ' + this.id + '::shadow .toolbar').html(this.name);
             
             // Add the export buttons on the table
-            if($("body /deep/ #" + this.id + "::shadow .DTTT_button_csv" ).has('button').length < 1){
-              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
-              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
-              $("body /deep/ #" + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
+            if($("body /deep/ " + this.id + "::shadow .DTTT_button_csv" ).has('button').length < 1){
+              $("body /deep/ " + this.id + "::shadow .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
+              $("body /deep/ " + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
+              $("body /deep/ " + this.id + "::shadow .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
             }
 
             // Perform the exportCSV function
-            $("body /deep/ #" + this.id + "::shadow #export_excel").click(function(){
+            $("body /deep/ " + this.id + "::shadow #export_excel").click(function(){
               self.exportCsv();
             });
 
+            // Perform the exportPDF function
+            $("body /deep/ " + this.id + "::shadow #export_pdf").click(function(){
+              self.exportPdf();
+            });
+
             // Add the search text to the textbox
-            $('body /deep/ #' + this.id + '::shadow input[type="search"]').attr('placeholder','Search');  
+            $('body /deep/ ' + this.id + '::shadow input[type="search"]').attr('placeholder','Search');  
 
             // If we are handling data via server side
             if(self.server){
   
               // Override the sorting functionality and write our own custom sorting
-              $("body /deep/ #" + this.id + "::shadow th").not('.sorting_disabled').unbind().bind('click', 'th', function(e){
+              $("body /deep/ " + this.id + "::shadow th").not('.sorting_disabled').unbind().bind('click', 'th', function(e){
                 
                 var title = $(this).text();
                 var data = '';
@@ -123,7 +132,7 @@ Datatable element that can handle data client side and server side
               }); // End overriding and adding custom search functionality
                   
               //  Unbind previous default bindings for search
-              $("body /deep/ #" + this.id + "::shadow .dataTables_filter input").unbind() 
+              $("body /deep/ " + this.id + "::shadow .dataTables_filter input").unbind() 
                 .bind("input", function(e) { // And bind our desired behavior
                   // reload table data
                   self.search = this.value;
@@ -183,6 +192,34 @@ Datatable element that can handle data client side and server side
           }
         });
     }, // END Custom pagination function
+
+    // Export PDF functionality
+    exportCsv: function(){
+
+      var html = "<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <script src="../webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="dribbble-data.html">
+
+  <link href="../polymer/polymer.html" rel="import">
+</head>
+<body>
+    <dribbble-data></dribbble-data>
+  </body>
+</html>";
+      <tcg-data-table id=this.id 
+        name=this.name
+        data=this.data
+        columns=this.columns 
+        perPage=this.perPage 
+        page=this.page
+        total=this.total 
+        search=this.search 
+        sort=this.sort
+        server=this.server></tcg-data-table>
+    window.open(, '_blank');
+    }, // End export PDF functionality
 
     // Export CSV functionality
     exportCsv: function(){
