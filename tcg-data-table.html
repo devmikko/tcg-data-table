@@ -72,7 +72,7 @@ Datatable element that can handle data client side and server side
 
           this.async(function(){
 
-            if(this.id){
+            if(this.id && this.id.indexOf('#') > 0){
               this.id = '#' + this.id;
             }
             
