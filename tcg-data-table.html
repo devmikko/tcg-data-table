@@ -174,18 +174,18 @@ Datatable element that can handle data client side and server side
             var template = prevTemplate + pages + nextTemplate;
 
             // Add the New Pagination template
-            $('body /deep/ #' + this.id + '::shadow .dataTables_paginate').html(template);
+            $('body /deep/ ' + this.id + '::shadow .dataTables_paginate').html(template);
 
             // Perform the Link functionality to set page accordingly
             this.async(function(){
               var self = this;
-              $('body /deep/ #' + this.id + '::shadow #table_next').not('.disabled').click(function(){
+              $('body /deep/ ' + this.id + '::shadow #table_next').not('.disabled').click(function(){
                 self.page += 1;
               });
-              $('body /deep/ #' + this.id + '::shadow #table_previous').not('.disabled').click(function(){
+              $('body /deep/ ' + this.id + '::shadow #table_previous').not('.disabled').click(function(){
                 self.page -= 1;
               });
-              $('body /deep/ #' + this.id + '::shadow .pageinate_page').click(function(){
+              $('body /deep/ ' + this.id + '::shadow .pageinate_page').click(function(){
                 self.page = $(this).data('page');
               });
             });
@@ -195,19 +195,8 @@ Datatable element that can handle data client side and server side
 
     // Export PDF functionality
     exportCsv: function(){
-
-      var html = "<html>
-<head>
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../webcomponentsjs/webcomponents.min.js"></script>
-  <link rel="import" href="dribbble-data.html">
-
-  <link href="../polymer/polymer.html" rel="import">
-</head>
-<body>
-    <dribbble-data></dribbble-data>
-  </body>
-</html>";
+/*
+      var html = "
       <tcg-data-table id=this.id 
         name=this.name
         data=this.data
@@ -223,7 +212,7 @@ Datatable element that can handle data client side and server side
 
     // Export CSV functionality
     exportCsv: function(){
-      var value = $('body /deep/ #' + this.id + '::shadow table').children().map(function(i, group){
+      var value = $('body /deep/ ' + this.id + '::shadow table').children().map(function(i, group){
         return $(group).children().toArray().map(function(tr){
           return '"' + $(tr).children().toArray().map(function(td){
             return $(td).text().trim().replace(/"/g, '""');
@@ -233,7 +222,7 @@ Datatable element that can handle data client side and server side
 
       //Download the file
       this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
-   
+   */
     }, // End export CSV functionality
 
     // Download functionality for exporting CSV
