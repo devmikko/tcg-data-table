@@ -194,20 +194,40 @@ Datatable element that can handle data client side and server side
     }, // END Custom pagination function
 
     // Export PDF functionality
-    exportCsv: function(){
-/*
-      var html = "
-      <tcg-data-table id=this.id 
-        name=this.name
-        data=this.data
-        columns=this.columns 
-        perPage=this.perPage 
-        page=this.page
-        total=this.total 
-        search=this.search 
-        sort=this.sort
-        server=this.server></tcg-data-table>
-    window.open(, '_blank');
+    exportPdf: function(){
+      var header = "<style> table {width: 100%; border:1px solid #dddddd} ";
+      header += "th {color: gray; border-top: 0px important!} td, th{padding: 8px 10px;} ";
+      header += ".odd{background-color:#F9FCFD;}</style>";
+      var body = "<table border='1' cellpadding='0' cellspacing='0'>";
+      var color = 1;
+      var title = '';
+      body += "<tr>";
+      for(var c=0; c < this.columns.length; c++){
+        body += "<th>" + this.columns[c]['title'] + "</th>";
+      }
+      body += "</tr>";
+      for(var i=0; i < this.data.length; i++){
+        if(color == 1){
+          body += "<tr class='odd'>";
+        } else {
+          body += "<tr class='even'>";
+        }
+        color = color * -1;
+        jQuery.each(this.data[i], function(i, val) {
+          body += "<td>" + val + "</td>";
+                
+        });
+
+        body += "</tr>";
+      }
+        
+      body += "</table>";
+
+//      body = JSON.stringify(this.data);
+      var w = window.open();
+      
+      $(w.document.head).html(header);
+      $(w.document.body).html(body);
     }, // End export PDF functionality
 
     // Export CSV functionality
@@ -222,7 +242,7 @@ Datatable element that can handle data client side and server side
 
       //Download the file
       this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
-   */
+   
     }, // End export CSV functionality
 
     // Download functionality for exporting CSV
