@@ -12,41 +12,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>seed-element</title>
+  <title>tcg-data-table</title>
 
   <script src="../../webcomponentsjs/webcomponents.min.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <!-- Step 1: import the element to test -->
-  <link rel="import" href="../seed-element.html">
+  <link rel="import" href="../tcg-data-table.html">
 </head>
 <body>
 
-  <!-- You use the document as a place to set up your fixtures. -->
-  <seed-element></seed-element>
+  <tcg-data-table 
+        columns='[
+            { "data": "name", "title": "Name" },
+            { "data": "position", "title": "Position" },
+            { "data": "office", "title": "Office" },
+            { "data": "extn", "title": "Extension" },
+            { "data": "start_date", "title": "Start date" },
+            { "data": "salary", "title": "Salary" }
+        ]' 
+        data='[
+            {
+              "name": "Tiger Nixon",
+              "position": "System Architect",
+              "salary": "$320,800",
+              "start_date": "2011/04/25",
+              "office": "Edinburgh",
+              "extn": "5421"
+            },
+            {
+              "name": "Garrett Winters",
+              "position": "Accountant",
+              "salary": "$170,750",
+              "start_date": "2011/07/25",
+              "office": "Tokyo",
+              "extn": "8422"
+            },
+            {
+              "name": "Ashton Cox",
+              "position": "Junior Technical Author",
+              "salary": "$86,000",
+              "start_date": "2009/01/12",
+              "office": "San Francisco",
+              "extn": "1562"
+            }
+          ]'></tcg-data-table>
 
   <script>
-    var myEl = document.querySelector('seed-element');
+    var table = document.querySelector('tcg-data-table');
 
-    suite('<seed-element>', function() {
+    suite('<tcg-data-table>', function() {
 
-      test('defines the "author" property', function() {
-        assert.equal(myEl.author, 'Dimitri Glazkov');
+      test('Column has a name attribute', function() {
+        assert.equal(table.columns[0].data, "name");
       });
 
-      test('says hello', function() {
-        assert.equal(myEl.sayHello(), 'seed-element says, Hello World!');
-
-        var greetings = myEl.sayHello('greetings Earthlings');
-        assert.equal(greetings, 'seed-element says, greetings Earthlings');
+      test('Name result in index 0 is equal to "Tiger Nixon"', function() {
+        assert.equal(table.data[0].name, "Tiger Nixon");
       });
 
-      test('fires lasers', function(done) {
-        myEl.addEventListener('seed-element-lasers-success', function(event) {
-          assert.equal(event.detail.sound, 'Pew pew pew!');
-          done();
-        });
-        myEl.fireLasers();
+      test('Table reloads when data is updated and it adds new data', function() {
+
+        var newData = [
+            {
+              "name": "Tiger Nixon",
+              "position": "System Architect",
+              "salary": "$320,800",
+              "start_date": "2011/04/25",
+              "office": "Edinburgh",
+              "extn": "5421"
+            },
+            {
+              "name": "Garrett Winters",
+              "position": "Accountant",
+              "salary": "$170,750",
+              "start_date": "2011/07/25",
+              "office": "Tokyo",
+              "extn": "8422"
+            },
+            {
+              "name": "Ashton Cox",
+              "position": "Junior Technical Author",
+              "salary": "$86,000",
+              "start_date": "2009/01/12",
+              "office": "San Francisco",
+              "extn": "1562"
+            },
+            {
+              "name": "Cedric Kelly",
+              "position": "Senior Javascript Developer",
+              "salary": "$433,060",
+              "start_date": "2012/03/29",
+              "office": "Edinburgh",
+              "extn": "6224"
+            }
+        ];
+
+        table.data = newData;
+
+        assert.equal(table.data[3].name, "Cedric Kelly");
+        
       });
 
     });

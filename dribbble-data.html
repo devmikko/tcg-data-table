@@ -22,7 +22,7 @@ more info, see [the docs](https://ele.io/docs).
         handleAs="json"
         response="{{shots}}"></core-ajax>
 
-      <tcg-data-table id="dribbble" 
+      <tcg-data-table
         name="Dribbble Demo" 
         data="{{ data }}"
         columns="{{ columns }}" 
@@ -38,7 +38,8 @@ more info, see [the docs](https://ele.io/docs).
     Polymer('dribbble-data', {
 
       /*** DRIBBBLE Access Token get from: http://developer.dribbble.com/ ***/
-      //accessToken: '',
+      accessToken: '',
+      
       
       
       name: 'Polymer Dev',
