@@ -193,42 +193,38 @@ Datatable element that can handle data client side and server side
         });
     }, // END Custom pagination function
 
-    // Export PDF functionality
+    // Create new html table in a new window to be converted to pdf
     exportPdf: function(){
+      // Header tag for custom css
       var header = "<style> table {width: 100%; border:1px solid #dddddd} ";
       header += "th {color: gray; border-top: 0px important!} td, th{padding: 8px 10px;} ";
       header += ".odd{background-color:#F9FCFD;}</style>";
+      // Start body
       var body = "<table border='1' cellpadding='0' cellspacing='0'>";
-      var color = 1;
-      var title = '';
+      var color = true;
       body += "<tr>";
       for(var c=0; c < this.columns.length; c++){
         body += "<th>" + this.columns[c]['title'] + "</th>";
       }
       body += "</tr>";
       for(var i=0; i < this.data.length; i++){
-        if(color == 1){
+        if(color === true){
           body += "<tr class='odd'>";
         } else {
           body += "<tr class='even'>";
         }
-        color = color * -1;
+        color = !color;
         jQuery.each(this.data[i], function(i, val) {
-          body += "<td>" + val + "</td>";
-                
+          body += "<td>" + val + "</td>";     
         });
-
         body += "</tr>";
-      }
-        
+      }        
       body += "</table>";
-
-//      body = JSON.stringify(this.data);
       var w = window.open();
       
       $(w.document.head).html(header);
       $(w.document.body).html(body);
-    }, // End export PDF functionality
+    }, // End Create new html table in a new window to be converted to pdf
 
     // Export CSV functionality
     exportCsv: function(){
@@ -250,17 +246,13 @@ Datatable element that can handle data client side and server side
       var link = document.createElement('a');
       if (typeof link.download !== 'string')
         return location.replace();
-
       document.body.appendChild(link); //Firefox requires the link to be in the body
       link.download = filename;
       link.href = uri;
       link.click();
       document.body.removeChild(link); //remove the link when done
-    
     }, // End Download functionality
-
   });
-
 
   </script>
 </polymer-element>
