@@ -1,0 +1,100 @@
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>tcg-data-table</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <!-- Step 1: import the element to test -->
+  <link rel="import" href="../tcg-data-table.html">
+</head>
+<body>
+
+  <tcg-data-table 
+        name="TCG-DATA-TABLE"
+        columns='[
+            { "data": "name", "title": "Name" },
+            { "data": "position", "title": "Position" },
+            { "data": "office", "title": "Office" },
+            { "data": "extn", "title": "Extension" },
+            { "data": "start_date", "title": "Start date" },
+            { "data": "salary", "title": "Salary" }
+        ]'
+        data='[
+            {
+              "name": "Ashton Cox",
+              "position": "Junior Technical Author",
+              "salary": "$86,000",
+              "start_date": "2009/01/12",
+              "office": "San Francisco",
+              "extn": "1562"
+            },
+            {
+              "name": "Cedric Kelly",
+              "position": "Senior Javascript Developer",
+              "salary": "$433,060",
+              "start_date": "2012/03/29",
+              "office": "Edinburgh",
+              "extn": "6224"
+            },
+            {
+              "name": "Garrett Winters",
+              "position": "Accountant",
+              "salary": "$170,750",
+              "start_date": "2011/07/25",
+              "office": "Tokyo",
+              "extn": "8422"
+            },
+            {
+              "name": "Tiger Nixon",
+              "position": "System Architect",
+              "salary": "$320,800",
+              "start_date": "2011/04/25",
+              "office": "Edinburgh",
+              "extn": "5421"
+            }
+        ]'
+        perPage="2" search=""></tcg-data-table>
+
+  <script>
+    var table = document.querySelector('tcg-data-table');
+
+    suite('<tcg-data-table>', function() {
+
+      test('Test the search value gets the right row', function() {
+
+      	// Perform Search for CE
+
+      	$("body /deep/ .dataTables_filter input").focus();
+			var c = $.Event("keyup");
+		c.which = 67; // # Some key code value
+	    $("body /deep/ .dataTables_filter input").val(String.fromCharCode(c.which));
+	    $("body /deep/ .dataTables_filter input").trigger(c);
+	    var d = $.Event("keyup");
+	    d.which = 69; // # Some key code value
+	    $("body /deep/ .dataTables_filter input").val(String.fromCharCode(c.which) +String.fromCharCode(d.which));
+	    $("body /deep/ .dataTables_filter input").trigger(d);
+
+	    // Check that the first result is Cedric Kelly
+	    assert($('body /deep/ table tr:first-child td:first-child').html() == "Cedric Kelly");
+      });
+     
+
+    });
+  </script>
+
+</body>
+</html>

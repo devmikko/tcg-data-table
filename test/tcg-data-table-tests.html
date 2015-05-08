@@ -16,6 +16,7 @@
 
   <script src="../../webcomponentsjs/webcomponents.min.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
   <!-- Step 1: import the element to test -->
   <link rel="import" href="../tcg-data-table.html">
@@ -23,6 +24,7 @@
 <body>
 
   <tcg-data-table 
+        name="TCG-DATA-TABLE"
         columns='[
             { "data": "name", "title": "Name" },
             { "data": "position", "title": "Position" },
@@ -71,6 +73,14 @@
         assert.equal(table.data[0].name, "Tiger Nixon");
       });
 
+      test('Confirm That the Data Table is showing the correct name', function(){
+        assert.equal($('body /deep/ .toolbar').html(), "TCG-DATA-TABLE");
+      });
+
+      test('Test that table has the correct number of rows', function() {
+        assert.equal($('body /deep/ table tr').length, 4);
+      });
+
       test('Table reloads when data is updated and it adds new data', function() {
 
         var newData = [
@@ -111,6 +121,7 @@
         table.data = newData;
 
         assert.equal(table.data[3].name, "Cedric Kelly");
+        
         
       });
 
