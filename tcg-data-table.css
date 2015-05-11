@@ -29,6 +29,16 @@ td, tr, tbody {border: 1px solid #dddddd !important;
 
 th {color: gray;}
 
+select {
+   padding: 10px 18px 6px 18px; 
+   width: 120px;
+   -webkit-appearance: none;
+   text-align: center;
+   /*text-indent: 18px;*/
+   background-color: #F9FCFD;
+
+}
+
 .toolbar {
 	font-size: 200%; 
 	display: inline; 
@@ -108,7 +118,6 @@ input:focus {
   height: 25px;
   float: right;
   background-color: transparent;
-  /* position: absolute; */
   background-size: 32px 25px;
   visibility: visible;
   margin-right: 10px;
