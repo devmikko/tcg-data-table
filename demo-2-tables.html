@@ -17,7 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 <body style="background:#f1f1f1;">
   <template id="page-template" is="auto-binding">
-    <tcg-data-table data="{{ data }}" id="mytable" columns="{{ columns }}" numbers="true" search="{{ search }}" name="New Customers"></tcg-data-table>
+    <tcg-data-table id="table" data="{{ data }}" columns="{{ columns }}" numbers="true" search="{{ search }}" name="New Customers"></tcg-data-table>
+    <br />
+    <tcg-data-table data="{{ data2 }}" columns="{{ columns2 }}" id="table2" name="New Customers 2"></tcg-data-table>
   </template>
   
   <script>
@@ -489,6 +491,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           "extn": "4226"
         }
     ];
+
+    template.columns2 = [
+        { "data": "name", "title": "Name" },
+        { "data": "position", "title": "Position" },
+        { "data": "office", "title": "Office" }
+    ];
+
+    template.data2 = [
+        {
+          "name": "John Doe",
+          "position": "Web Developer",
+          "office": "Pacific Beach"
+        },
+        {
+          "name": "Bob Smith",
+          "position": "Accountant",
+          "office": "Downtown"
+        },
+        {
+          "name": "Frank Jones",
+          "position": "Junior Technical Author",
+          "office": "Pacific Beach"
+        },
+      ];
   </script>
   </body>
 </html>
