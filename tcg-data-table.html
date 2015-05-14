@@ -281,6 +281,7 @@ Datatable element that can handle data client side and server side
     // Export CSV functionality
     exportCsv: function(table_id){  
       var filter_check = false;
+      console.log(table_id);
       var value = $('body /deep/ ' + table_id + '::shadow table').children().map(function(i, group){
         return $(group).children().toArray().map(function(tr){
           return '"' + $(tr).children().toArray().map(function(td){
@@ -291,9 +292,8 @@ Datatable element that can handle data client side and server side
           }).join('","') + '"';
         })
       }).toArray().join('\n');
-      /*if(filter_check === true)
+      if(filter_check === true)
         value = value.substring(value.indexOf('\n')+1,value.length);
-      */
 
       //Download the file
       this.download('data:application/csv;charset=utf-8,' + encodeURIComponent(value), 'table_data.csv');
