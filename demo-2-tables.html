@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template id="page-template" is="auto-binding">
     <tcg-data-table id="table" data="{{ data }}" columns="{{ columns }}" numbers="true" search="{{ search }}" name="New Customers"></tcg-data-table>
     <br />
-    <tcg-data-table data="{{ data2 }}" columns="{{ columns2 }}" id="table2" name="New Customers 2"></tcg-data-table>
+    <tcg-data-table data="{{ data }}" columns="{{ columns }}" id="table2" filters='true' name="New Customers 2"></tcg-data-table>
   </template>
   
   <script>

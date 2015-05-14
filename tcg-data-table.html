@@ -44,6 +44,7 @@ Datatable element that can handle data client side and server side
         server: false,
         numbers: false,
         table_id:'',
+        filters: false,
       },
 
       observe: {
@@ -63,7 +64,9 @@ Datatable element that can handle data client side and server side
           if(this.oTable){
             this.oTable.destroy();
           }
-          
+
+          var filters = this.filters;
+
           // create the Datatable
           this.oTable = $(this.$.table).DataTable({
             "dom": 'T<"toolbar">lfrtip',
@@ -74,6 +77,7 @@ Datatable element that can handle data client side and server side
             "oLanguage": { "sSearch": "" },
             "order": [[ 1, 'asc' ]],
             initComplete: function () {
+              if(filters){
                 this.api().columns().every( function () {
                     var column = this;
                     var select = $('<select><option value="">Filter</option></select>')
@@ -90,8 +94,8 @@ Datatable element that can handle data client side and server side
                         select.append( '<option value="'+d+'">'+d+'</option>' )
                     } );
                 } );
+              }
             }
-
           });
 
 
@@ -135,9 +139,11 @@ Datatable element that can handle data client side and server side
             });
 
             // Perform the exportPDF function
+            /*
             $("body /deep/ " + this.table_id + "::shadow #export_pdf").click(function(){
               self.exportPdf();
             });
+            */
 
             // Add the search text to the textbox
             $('body /deep/ ' + this.table_id + '::shadow input[type="search"]').attr('placeholder','Search');  
@@ -273,20 +279,21 @@ Datatable element that can handle data client side and server side
     }, // End Create new html table in a new window to be converted to pdf
 
     // Export CSV functionality
-    exportCsv: function(table_id){
-
+    exportCsv: function(table_id){  
+      var filter_check = false;
       var value = $('body /deep/ ' + table_id + '::shadow table').children().map(function(i, group){
         return $(group).children().toArray().map(function(tr){
           return '"' + $(tr).children().toArray().map(function(td){
             if($(td).text().indexOf("Filter") != -1){
-              filters = true;
+              filter_check = true;
           };
             return $(td).text().trim().replace(/"/g, '""');
           }).join('","') + '"';
         })
       }).toArray().join('\n');
-      if(filters === true)
+      /*if(filter_check === true)
         value = value.substring(value.indexOf('\n')+1,value.length);
+      */
 
       //Download the file
       this.download('data:application/csv;charset=utf-8,' + encodeURIComponent(value), 'table_data.csv');
