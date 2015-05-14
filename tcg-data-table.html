@@ -129,7 +129,7 @@ Datatable element that can handle data client side and server side
             }
 
             // Perform the exportCSV function
-            $("body /deep/ " + self.table_id + "::shadow #export_excel").click(function(){
+            $("body /deep/ " + self.table_id + "::shadow #export_excel").unbind('click').click(function(){
               
               self.exportCsv(self.table_id);
             });
