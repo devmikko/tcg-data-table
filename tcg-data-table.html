@@ -17,7 +17,14 @@ Datatable element that can handle data client side and server side
   <template>
     <!--<link rel="stylesheet" href="datatables/media/css/jquery.dataTables.css"> -->
     <link rel="stylesheet" href="./tcg-data-table.css"> 
-    <table id="table" class="display stripe" cellspacing="0" width="100%"></table>
+    <table id="table" class="display stripe" cellspacing="0" width="100%"><tfoot>
+      <tr>
+        <template repeat="{{ cols in columns  }}">
+          <th>
+          </th>
+        </template>
+        </tr>
+    </tfoot></table>
   </template>
   <script src="../datatables/media/js/jquery.js"></script>
   <script src="../datatables/media/js/jquery.dataTables.min.js"></script>
@@ -65,7 +72,25 @@ Datatable element that can handle data client side and server side
             "bLengthChange": false,
             "iDisplayLength": this.perPage,
             "oLanguage": { "sSearch": "" },
-            "order": [[ 1, 'asc' ]]
+            "order": [[ 1, 'asc' ]],
+            initComplete: function () {
+                this.api().columns().every( function () {
+                    var column = this;
+                    var select = $('<select><option value="">Filter</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );     
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } );
+            }
 
           });
 
@@ -95,19 +120,17 @@ Datatable element that can handle data client side and server side
 
             // Add the name to the table
             $('body /deep/ ' + this.table_id + '::shadow .toolbar').html(this.name);
-
             // Add the export buttons on the table
             if($("body /deep/ " + this.table_id + "::shadow .DTTT_button_csv" ).has('button').length < 1){
               $("body /deep/ " + this.table_id + "::shadow .DTTT_button_csv").append("<label id=\"export_label\">Export:</label>");
               $("body /deep/ " + this.table_id + "::shadow .DTTT_button_csv").append("<button id=\"export_pdf\"></button>");
+              /*$("body /deep/ " + this.table_id + "::shadow .DTTT_button_csv").append("<button id='"+self.id+"' class=\"export_excel\" onClick=\"self.exportCsv("+self.id+")\" ></button>");*/
               $("body /deep/ " + this.table_id + "::shadow .DTTT_button_csv").append("<button id=\"export_excel\"></button>");
             }
 
             // Perform the exportCSV function
-            $("body /deep/ " + this.table_id + "::shadow #export_excel").unbind('click').click(function(){
-              console.log('---table id---');
-              // console.log(self.table_id);
-              console.log(self.id);
+            $("body /deep/ " + self.table_id + "::shadow #export_excel").click(function(){
+              
               self.exportCsv(self.table_id);
             });
 
@@ -251,16 +274,22 @@ Datatable element that can handle data client side and server side
 
     // Export CSV functionality
     exportCsv: function(table_id){
+
       var value = $('body /deep/ ' + table_id + '::shadow table').children().map(function(i, group){
         return $(group).children().toArray().map(function(tr){
           return '"' + $(tr).children().toArray().map(function(td){
+            if($(td).text().indexOf("Filter") != -1){
+              filters = true;
+          };
             return $(td).text().trim().replace(/"/g, '""');
           }).join('","') + '"';
         })
-      }).toArray().join('\n');        
+      }).toArray().join('\n');
+      if(filters === true)
+        value = value.substring(value.indexOf('\n')+1,value.length);
 
       //Download the file
-      this.download('data:application/xls;charset=utf-8,' + encodeURIComponent(value), 'table_data.xls');
+      this.download('data:application/csv;charset=utf-8,' + encodeURIComponent(value), 'table_data.csv');
    
     }, // End export CSV functionality
 
