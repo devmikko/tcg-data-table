@@ -30,16 +30,36 @@ bower install --save tcg-data-table
 ```
 <tcg-data-table 
 	id="table_id"
-	server="true"
-    name="Title of Table Data" 
-    data="{{ data }}" 
-    columns="{{ columns }}" 
-    perPage="{{ per_page }}" 
-    page="{{ page }}" 
-    total="{{ total }}" 
-    search="{{ search }}" 
-    sort="{{ sort }}"></tcg-data-table>
+  name="Title of Table Data" 
+  data="{{ data }}" 
+  columns="{{ columns }}"
+  server="true"
+  filter="true"
+  perPage="{{ per_page }}" 
+  page="{{ page }}" 
+  total="{{ total }}" 
+  search="{{ search }}"
+  sort="{{ sort }}"></tcg-data-table>
 ```
+
+###Important note: if you are using more than one table in your page you must specify a unique ID for each table to distinguish them from one another.
+
+###Attributes:
+
+```
+  -------------------------------------------------------------------
+ | id         | Specify a Unique ID for your table                   |
+ | name       | The Name of Your table (shown at the top left)       |
+ | data       | JSON Data for table (examples below)                 |
+ | columns    | Columns for json data (examples below)               |
+ | server     | Is the data going to be server side (default: false) |
+ | filter     | Should table be filterable (default: true)           |
+ | perPage    | How many results to show per per page                |
+ | page       | What is the current page (valid only if server=true) |
+ | total      | Total records (valid only if server=true)            |
+ | search     | Search value (valid only if server=true)             |
+ | sort       | Sort value (valid only if server=true)               |
+  -------------------------------------------------------------------
 
 Sample data:
 
