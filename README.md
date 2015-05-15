@@ -60,6 +60,7 @@ bower install --save tcg-data-table
  | search     | Search value (valid only if server=true)             |
  | sort       | Sort value (valid only if server=true)               |
   -------------------------------------------------------------------
+```
 
 Sample data:
 
